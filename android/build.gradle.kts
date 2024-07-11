@@ -1,3 +1,8 @@
+import config.sample.VariantDimension
+import config.sample.VariantDimension.dev
+import config.sample.VariantDimension.prod
+import config.sample.VariantDimension.staging
+
 plugins {
   alias(libs.plugins.androidApplication)
   alias(libs.plugins.compose.compiler)
@@ -34,11 +39,30 @@ android {
   kotlinOptions {
     jvmTarget = "17"
   }
+
+  flavorDimensions.add(VariantDimension.name)
+
+  productFlavors {
+    create(dev) {
+      dimension = VariantDimension.name
+      isDefault = true
+      applicationIdSuffix = ".dev"
+      resValue("string", "app_name", "Config Sample Dev")
+    }
+
+    create(staging) {
+      dimension = VariantDimension.name
+      applicationIdSuffix = ".staging"
+      resValue("string", "app_name", "Config Sample Staging")
+    }
+
+    create(prod) {
+      dimension = VariantDimension.name
+    }
+  }
 }
 
-
 dependencies {
-
   implementation(projects.shared)
 
   implementation(libs.androidx.activity.compose)
